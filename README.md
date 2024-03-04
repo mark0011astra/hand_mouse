@@ -57,6 +57,9 @@ python hand_tracking_mouse_controller.py
 
 出力ウィンドウがフォーカスされている状態で `q` を押すと、アプリケーションを安全に閉じることができます。
 
+## Index_finger_detection_only.py
+Index_finger_detection_only.pyは、実際にマウスカーソルを操作するのではなく、人差し指の位置とクリックの検出をWindow上に表示するだけの実装です。
+
 ## ライセンス
 
 このプロジェクトはオープンソースであり、MITライセンスの下で利用可能です。
@@ -116,6 +119,9 @@ Ensure your webcam is accessible and not being used by another application.
 ## Quitting the Application
 
 Press `q` while the output window is focused to safely close the application.
+
+## Index_finger_detection_only.py
+Index_finger_detection_only.py is an implementation that does not actually operate the mouse cursor, but only displays the index finger position and click detection on the Window.
 
 ## License
 
