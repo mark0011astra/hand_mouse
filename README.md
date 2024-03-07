@@ -1,5 +1,65 @@
 # hand_mouse
+## Hand Tracking-Based Mouse Controller
 
+This project is an advanced implementation that allows controlling the mouse cursor using hand gestures captured through a webcam. It utilizes computer vision and hand tracking technologies to translate hand movements and gestures into cursor movements and mouse clicks.
+
+## Features
+
+- **Hand Tracking**: Leverages MediaPipe for real-time hand tracking.
+- **Cursor Movement**: Maps the index finger's movement to the mouse cursor.
+- **Click Detection**: Detects a click action when the thumb and index finger tips are close together.
+- **Moving Average Filter**: Applies a moving average filter to smooth the cursor's movement.
+
+## Requirements
+
+- Python 3.6 or later
+- OpenCV (`cv2`): For capturing video input from the webcam and displaying the output.
+- MediaPipe (`mediapipe`): For hand tracking.
+- NumPy (`numpy`): For numerical operations.
+- PyAutoGUI (`pyautogui`): For controlling the mouse cursor.
+
+## Installation
+
+To install the required libraries, run:
+
+```bash
+pip install opencv-python mediapipe numpy pyautogui
+```
+
+## Usage
+
+To start the hand tracking mouse controller, run:
+
+```bash
+python hand_tracking_mouse_controller.py
+```
+
+Ensure your webcam is accessible and not being used by another application.
+
+## How It Works
+
+1. **Initialization**: Sets up hand tracking with MediaPipe and retrieves screen resolution using PyAutoGUI.
+2. **Video Capture**: Continuously captures video frames from the webcam.
+3. **Hand Detection**: Each frame is processed to detect the hand and identify landmarks such as the thumb tip and index finger tip.
+4. **Cursor Movement**: Calculates the position of the index finger tip and applies a moving average filter to smooth the movement. The cursor's screen position is scaled based on the detected position.
+5. **Click Detection**: Determines if a click action should be performed based on the distance between the thumb tip and index finger tip.
+6. **Action Execution**: Moves the mouse cursor and performs click actions accordingly.
+
+## Customization
+
+- **Cursor Sensitivity**: Adjust the mapping between hand movement and cursor movement by modifying the scaling factors.
+- **Click Sensitivity**: Change the distance threshold for click detection to suit your preference.
+
+## Quitting the Application
+
+Press `q` while the output window is focused to safely close the application.
+
+## Index_finger_detection_only.py
+Index_finger_detection_only.py is an implementation that does not actually operate the mouse cursor, but only displays the index finger position and click detection on the Window.
+
+## License
+
+This project is open source and available under the MIT License.
 
 
 # 手の動きによるマウスカーソル操作
@@ -65,64 +125,4 @@ Index_finger_detection_only.pyは、実際にマウスカーソルを操作す�
 このプロジェクトはオープンソースであり、MITライセンスの下で利用可能です。
 
 
-# Advanced Hand Tracking-Based Mouse Controller
 
-This project is an advanced implementation that allows controlling the mouse cursor using hand gestures captured through a webcam. It utilizes computer vision and hand tracking technologies to translate hand movements and gestures into cursor movements and mouse clicks.
-
-## Features
-
-- **Hand Tracking**: Leverages MediaPipe for real-time hand tracking.
-- **Cursor Movement**: Maps the index finger's movement to the mouse cursor.
-- **Click Detection**: Detects a click action when the thumb and index finger tips are close together.
-- **Moving Average Filter**: Applies a moving average filter to smooth the cursor's movement.
-
-## Requirements
-
-- Python 3.6 or later
-- OpenCV (`cv2`): For capturing video input from the webcam and displaying the output.
-- MediaPipe (`mediapipe`): For hand tracking.
-- NumPy (`numpy`): For numerical operations.
-- PyAutoGUI (`pyautogui`): For controlling the mouse cursor.
-
-## Installation
-
-To install the required libraries, run:
-
-```bash
-pip install opencv-python mediapipe numpy pyautogui
-```
-
-## Usage
-
-To start the hand tracking mouse controller, run:
-
-```bash
-python hand_tracking_mouse_controller.py
-```
-
-Ensure your webcam is accessible and not being used by another application.
-
-## How It Works
-
-1. **Initialization**: Sets up hand tracking with MediaPipe and retrieves screen resolution using PyAutoGUI.
-2. **Video Capture**: Continuously captures video frames from the webcam.
-3. **Hand Detection**: Each frame is processed to detect the hand and identify landmarks such as the thumb tip and index finger tip.
-4. **Cursor Movement**: Calculates the position of the index finger tip and applies a moving average filter to smooth the movement. The cursor's screen position is scaled based on the detected position.
-5. **Click Detection**: Determines if a click action should be performed based on the distance between the thumb tip and index finger tip.
-6. **Action Execution**: Moves the mouse cursor and performs click actions accordingly.
-
-## Customization
-
-- **Cursor Sensitivity**: Adjust the mapping between hand movement and cursor movement by modifying the scaling factors.
-- **Click Sensitivity**: Change the distance threshold for click detection to suit your preference.
-
-## Quitting the Application
-
-Press `q` while the output window is focused to safely close the application.
-
-## Index_finger_detection_only.py
-Index_finger_detection_only.py is an implementation that does not actually operate the mouse cursor, but only displays the index finger position and click detection on the Window.
-
-## License
-
-This project is open source and available under the MIT License.
