@@ -89,30 +89,13 @@ R = | r1 0 |
 
 ```bash
 pip install mediapipe opencv-python numpy filterpy pywin32
-content_copy
-download
-Use code with caution.
-使用方法
-
-リポジトリをクローンします。
-
-git clone https://github.com/あなたのユーザー名/あなたのリポジトリ名.git
-content_copy
-download
-Use code with caution.
-Bash
-
+```
 main.py を実行します。
 
-python main.py
-content_copy
-download
-Use code with caution.
-Bash
 
 カメラに手をかざすと、手の動きに合わせてマウスカーソルが動きます。
 
-設定
+### 設定
 
 DEBUG (デフォルト: False): True に設定すると、デバッグ情報が出力されます。
 
@@ -124,7 +107,7 @@ kf.R (デフォルト: np.eye(2) * 0.8): カルマンフィルタの観測ノイ
 
 これらのパラメータは、main.py の先頭部分で設定できます。
 
-トラブルシューティング
+#### トラブルシューティング
 
 プログラムが起動しない: 必要なライブラリがすべてインストールされていることを確認してください。
 
@@ -134,7 +117,7 @@ kf.R (デフォルト: np.eye(2) * 0.8): カルマンフィルタの観測ノイ
 
 動作が重い: min_detection_confidence や min_tracking_confidence の値を下げると、処理が軽くなる可能性がありますが、精度が低下する可能性があります。
 
-貢献
+### 貢献
 
 このプロジェクトへの貢献は大歓迎です。バグの報告、機能の提案、プルリクエストなど、どのような形でも貢献していただければ幸いです。
 
@@ -142,11 +125,6 @@ kf.R (デフォルト: np.eye(2) * 0.8): カルマンフィルタの観測ノイ
 
 このプロジェクトは MIT ライセンスの下で公開されています。詳細は LICENSE ファイルをご覧ください。
 
-謝辞
+### 謝辞
 
 このプロジェクトは、MediaPipe Hands と filterpy ライブラリを使用しています。これらの素晴らしいライブラリの開発者に感謝します。
-
-この README が、あなたのプロジェクトを理解し、使用するのに役立つことを願っています。必要に応じて、さらに詳細な説明を追加したり、図表を追加したりして、よりわかりやすい README にしてください。
-content_copy
-download
-Use code with caution.
