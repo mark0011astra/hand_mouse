@@ -27,10 +27,13 @@ download
 Use code with caution.
 Markdown
 
-F = | 1 0 dt 0 |
-| 0 1 0 dt |
-| 0 0 1 0 |
-| 0 0 0 1 |
+
+F = \begin{bmatrix}
+1 & 0 & dt & 0 \\
+0 & 1 & 0 & dt \\
+0 & 0 & 1 & 0 \\
+0 & 0 & 0 & 1
+\end{bmatrix}
 
 where `dt` is the time interval between frames.
 
