@@ -27,14 +27,8 @@ download
 Use code with caution.
 Markdown
 
-```katex
-F = \begin{bmatrix}
-1 & 0 & dt & 0 \\
-0 & 1 & 0 & dt \\
-0 & 0 & 1 & 0 \\
-0 & 0 & 0 & 1
-\end{bmatrix}
-```
+H = \begin{pmatrix} 1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \end{pmatrix}
+
 where `dt` is the time interval between frames.
 
 **Observation Matrix (H):**
