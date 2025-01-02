@@ -2,7 +2,7 @@
 
 ## Overview
 
-This project implements a system that controls the mouse cursor using real-time hand tracking with MediaPipe Hands. It utilizes a Kalman filter to estimate the hand position, resulting in smooth and accurate mouse control from noisy observation data.
+#### This project implements a system that controls the mouse cursor using real-time hand tracking with MediaPipe Hands. Kalman filter and win32api are used for high accuracy, low latency tracking and ease of operation.
 
 ## Technical and Scientific Background
 
@@ -134,7 +134,7 @@ This project utilizes the MediaPipe Hands and filterpy libraries. We thank the d
 
 ## 概要
 
-このプロジェクトは、MediaPipe Hands を使用してリアルタイムに手の動きを検出し、その情報を用いてマウスカーソルを制御するシステムです。手の位置推定にはカルマンフィルタを適用し、ノイズの多い観測データから滑らかで正確なマウス操作を実現します。
+リアルタイムに手の動きを検出し、その情報を用いてマウスカーソルを制御するシステムです。カルマンフィルタとwin32apiを使用して、高精度、低遅延なトラッキングと操作性を実現しました。
 
 ## 技術的・学術的背景
 
