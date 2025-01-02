@@ -27,8 +27,9 @@ download
 Use code with caution.
 Markdown
 
-H = \begin{pmatrix} 1 & 0 & 0 & 0 \\\\ 0 & 1 & 0 & 0 \end{pmatrix}
-
+```math
+Q = \begin{bmatrix} q1 & 0 & 0 & 0 \\ 0 & q2 & 0 & 0 \\ 0 & 0 & q3 & 0 \\ 0 & 0 & 0 & q4 \end{bmatrix}
+```
 where `dt` is the time interval between frames.
 
 **Observation Matrix (H):**
