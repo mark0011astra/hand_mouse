@@ -1,128 +1,152 @@
-# hand_mouse
-## Hand Tracking-Based Mouse Controller
+# Hand Tracking Mouse Controller with Kalman Filter
 
-This project is an advanced implementation that allows controlling the mouse cursor using hand gestures captured through a webcam. It utilizes computer vision and hand tracking technologies to translate hand movements and gestures into cursor movements and mouse clicks.
+## 概要
 
-## Features
+このプロジェクトは、MediaPipe Hands を使用してリアルタイムに手の動きを検出し、その情報を用いてマウスカーソルを制御するシステムです。手の位置推定にはカルマンフィルタを適用し、ノイズの多い観測データから滑らかで正確なマウス操作を実現します。
 
-- **Hand Tracking**: Leverages MediaPipe for real-time hand tracking.
-- **Cursor Movement**: Maps the index finger's movement to the mouse cursor.
-- **Click Detection**: Detects a click action when the thumb and index finger tips are close together.
-- **Moving Average Filter**: Applies a moving average filter to smooth the cursor's movement.
+## 技術的・学術的背景
 
-## Requirements
+### MediaPipe Hands
 
-- Python 3.6 or later
-- OpenCV (`cv2`): For capturing video input from the webcam and displaying the output.
-- MediaPipe (`mediapipe`): For hand tracking.
-- NumPy (`numpy`): For numerical operations.
-- PyAutoGUI (`pyautogui`): For controlling the mouse cursor.
+[MediaPipe Hands](https://developers.google.com/mediapipe/solutions/vision/hand_landmarker) は、Google が開発した、機械学習を用いて高精度な手の検出とランドマーク推定を行うフレームワークです。このシステムでは、MediaPipe Hands を用いて、カメラから入力された画像から手の位置と 21 個のランドマーク (指の関節など) をリアルタイムに検出します。
 
-## Installation
+### カルマンフィルタ
 
-To install the required libraries, run:
+カルマンフィルタは、誤差のある観測値を用いて、動的システムの状態を推定するためのアルゴリズムです。時間とともに変化するシステムの状態を、**予測**と**更新**の 2 つのステップを繰り返すことで推定します。
 
-```bash
-pip install opencv-python mediapipe numpy pyautogui
-```
+*   **予測ステップ:** システムのモデルに基づいて、現在の状態から次の状態を予測します。
+*   **更新ステップ:** 観測値を用いて、予測された状態を修正します。
 
-## Usage
+このシステムでは、手の位置を状態とし、MediaPipe Hands から得られるランドマークの位置を観測値として、カルマンフィルタを適用しています。等速直線運動モデルを仮定し、以下の式で状態を推定します。
 
-To start the hand tracking mouse controller, run:
+**状態遷移行列 (F):**
+content_copy
+download
+Use code with caution.
+Markdown
 
-```bash
-python hand_tracking_mouse_controller.py
-```
+F = | 1 0 dt 0 |
+| 0 1 0 dt |
+| 0 0 1 0 |
+| 0 0 0 1 |
 
-Ensure your webcam is accessible and not being used by another application.
+ここで、`dt` はフレーム間の時間です。
 
-## How It Works
+**観測行列 (H):**
+content_copy
+download
+Use code with caution.
 
-1. **Initialization**: Sets up hand tracking with MediaPipe and retrieves screen resolution using PyAutoGUI.
-2. **Video Capture**: Continuously captures video frames from the webcam.
-3. **Hand Detection**: Each frame is processed to detect the hand and identify landmarks such as the thumb tip and index finger tip.
-4. **Cursor Movement**: Calculates the position of the index finger tip and applies a moving average filter to smooth the movement. The cursor's screen position is scaled based on the detected position.
-5. **Click Detection**: Determines if a click action should be performed based on the distance between the thumb tip and index finger tip.
-6. **Action Execution**: Moves the mouse cursor and performs click actions accordingly.
+H = | 1 0 0 0 |
+| 0 1 0 0 |
 
-## Customization
+**プロセスノイズ共分散行列 (Q):**
+content_copy
+download
+Use code with caution.
 
-- **Cursor Sensitivity**: Adjust the mapping between hand movement and cursor movement by modifying the scaling factors.
-- **Click Sensitivity**: Change the distance threshold for click detection to suit your preference.
+Q = | q1 0 0 0 |
+| 0 q2 0 0 |
+| 0 0 q3 0 |
+| 0 0 0 q4 |
 
-## Quitting the Application
+ここで、`q1`, `q2`, `q3`, `q4` はプロセスノイズの大きさを表すパラメータです。
 
-Press `q` while the output window is focused to safely close the application.
+**観測ノイズ共分散行列 (R):**
+content_copy
+download
+Use code with caution.
 
-## Index_finger_detection_only.py
-Index_finger_detection_only.py is an implementation that does not actually operate the mouse cursor, but only displays the index finger position and click detection on the Window.
+R = | r1 0 |
+| 0 r2 |
 
-## License
+ここで、`r1`, `r2` は観測ノイズの大きさを表すパラメータです。
 
-This project is open source and available under the MIT License.
+カルマンフィルタを適用することで、MediaPipe Hands から得られるノイズの多い手の位置情報を平滑化し、より滑らかで正確なマウスカーソルの動きを実現しています。
 
+### マウス制御
 
-# 手の動きによるマウスカーソル操作
+マウスカーソルの制御には、`win32api` ライブラリを使用しています。`win32api.SetCursorPos()` 関数を用いて、カルマンフィルタによって推定された手の位置にマウスカーソルを移動させています。
 
-このプロジェクトは、ウェブカメラを通じてキャプチャされた手のジェスチャーを使用してマウスカーソルを制御するための実装です。コンピュータビジョンと手のトラッキング技術を活用して、手の動きとジェスチャーをカーソルの動きとマウスクリックに変換します。
+### 感度調整
 
-## 特徴
+マウスカーソルの感度 (手の動きに対するマウスカーソルの移動量) は、スケーリング係数 `scaling_factor` によって調整できます。この係数を大きくすると、感度が向上します。また、カルマンフィルタのパラメータ `Q` と `R` を調整することでも、感度を微調整できます。
 
-- **手のトラッキング**: MediaPipeを利用したリアルタイムの手のトラッキング。
-- **カーソルの動き**: 人差し指の動きをマウスカーソルにマッピング。
-- **クリック検出**: 親指と人差し指の先が近づいたときにクリックアクションを検出。
-- **移動平均フィルタ**: カーソルの動きを滑らかにするための移動平均フィルタを適用。
+## 動作環境
 
-## 必要条件
+*   Windows 10/11
+*   Python 3.7 以上
 
-- Python 3.6以降
-- OpenCV (`cv2`): ウェブカメラからのビデオ入力をキャプチャし、出力を表示するため。
-- MediaPipe (`mediapipe`): 手のトラッキングのため。
-- NumPy (`numpy`): 数値演算のため。
-- PyAutoGUI (`pyautogui`): マウスカーソルを制御するため。
+## 必要なライブラリ
 
-## インストール
+*   mediapipe
+*   opencv-python
+*   numpy
+*   filterpy
+*   pywin32
 
-必要なライブラリをインストールするには、以下を実行してください:
-
-```bash
-pip install opencv-python mediapipe numpy pyautogui
-```
-
-## 使用方法
-
-手のトラッキングマウスコントローラーを起動するには、以下を実行してください:
+## インストール方法
 
 ```bash
-python hand_tracking_mouse_controller.py
-```
+pip install mediapipe opencv-python numpy filterpy pywin32
+content_copy
+download
+Use code with caution.
+使用方法
 
-ウェブカメラがアクセス可能であり、他のアプリケーションに使用されていないことを確認してください。
+リポジトリをクローンします。
 
-## 動作原理
+git clone https://github.com/あなたのユーザー名/あなたのリポジトリ名.git
+content_copy
+download
+Use code with caution.
+Bash
 
-1. **初期化**: MediaPipeで手のトラッキングを設定し、PyAutoGUIを使用して画面解像度を取得。
-2. **ビデオキャプチャ**: ウェブカメラからビデオフレームを連続してキャプチャ。
-3. **手の検出**: 各フレームを処理して手を検出し、親指の先や人差し指の先などのランドマークを識別。
-4. **カーソルの動き**: 人差し指の先の位置を計算し、移動を滑らかにするために移動平均フィルタを適用。検出された位置に基づいてカーソルの画面位置をスケーリング。
-5. **クリック検出**: 親指の先と人差し指の先の距離に基づいて、クリックアクションを実行するかどうかを決定。
-6. **アクション実行**: マウスカーソルを移動させ、必要に応じてクリックアクションを実行。
+main.py を実行します。
 
-## カスタマイズ
+python main.py
+content_copy
+download
+Use code with caution.
+Bash
 
-- **カーソルの感度**: 手の動きとカーソルの動きのマッピングを調整するために、スケーリングファクターを変更します。
-- **クリックの感度**: クリック検出のための距離閾値を、好みに合わせて変更します。
+カメラに手をかざすと、手の動きに合わせてマウスカーソルが動きます。
 
-## アプリケーションの終了方法
+設定
 
-出力ウィンドウがフォーカスされている状態で `q` を押すと、アプリケーションを安全に閉じることができます。
+DEBUG (デフォルト: False): True に設定すると、デバッグ情報が出力されます。
 
-## Index_finger_detection_only.py
-Index_finger_detection_only.pyは、実際にマウスカーソルを操作するのではなく、人差し指の位置とクリックの検出をWindow上に表示するだけの実装です。
+scaling_factor (デフォルト: 2.5): マウスカーソルの感度を調整します。
 
-## ライセンス
+kf.Q (デフォルト: np.eye(4) * 0.4): カルマンフィルタのプロセスノイズ共分散行列。
 
-このプロジェクトはオープンソースであり、MITライセンスの下で利用可能です。
+kf.R (デフォルト: np.eye(2) * 0.8): カルマンフィルタの観測ノイズ共分散行列。
 
+これらのパラメータは、main.py の先頭部分で設定できます。
 
+トラブルシューティング
 
+プログラムが起動しない: 必要なライブラリがすべてインストールされていることを確認してください。
+
+手が検出されない: カメラが正しく接続されていること、および MediaPipe Hands の動作環境を満たしていることを確認してください。
+
+マウスカーソルが動かない: win32api が正しくインストールされていることを確認してください。また、管理者権限で実行する必要がある場合があります。
+
+動作が重い: min_detection_confidence や min_tracking_confidence の値を下げると、処理が軽くなる可能性がありますが、精度が低下する可能性があります。
+
+貢献
+
+このプロジェクトへの貢献は大歓迎です。バグの報告、機能の提案、プルリクエストなど、どのような形でも貢献していただければ幸いです。
+
+ライセンス
+
+このプロジェクトは MIT ライセンスの下で公開されています。詳細は LICENSE ファイルをご覧ください。
+
+謝辞
+
+このプロジェクトは、MediaPipe Hands と filterpy ライブラリを使用しています。これらの素晴らしいライブラリの開発者に感謝します。
+
+この README が、あなたのプロジェクトを理解し、使用するのに役立つことを願っています。必要に応じて、さらに詳細な説明を追加したり、図表を追加したりして、よりわかりやすい README にしてください。
+content_copy
+download
+Use code with caution.
